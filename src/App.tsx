@@ -6,6 +6,7 @@ import { useAuth } from './hooks/useAuth';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Navbar from './components/layout/Navbar';
+import Accounts from './pages/Accounts';
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, loading } = useAuth();
@@ -26,6 +27,7 @@ function AppRoutes() {
       <Routes>
         <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
         <Route path="/register" element={user ? <Navigate to="/" /> : <Register />} />
+        <Route path="/accounts" element={<PrivateRoute><Accounts /></PrivateRoute>} />
       </Routes>
     </>
   );
