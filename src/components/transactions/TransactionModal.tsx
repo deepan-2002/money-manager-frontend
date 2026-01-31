@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { transactionService } from '../../services/transactionService';
 import { accountService } from '../../services/accountService';
 import toast from 'react-hot-toast';
-import { X, DollarSign, Wallet, Calendar } from 'lucide-react';
+import { X, Wallet, Calendar, IndianRupee } from 'lucide-react';
 import { EXPENSE_CATEGORIES, INCOME_CATEGORIES, DIVISIONS } from '../../utils/constants';
 import type { Account } from '../../types';
-import { formatCurrency } from '../../utils/helpers';
+import { formatCurrency, formatForDateTimeLocal } from '../../utils/helpers';
 
 interface Props {
     onClose: () => void;
@@ -22,7 +22,7 @@ const TransactionModal: React.FC<Props> = ({ onClose, onSuccess, transaction = n
         category: transaction?.category || '',
         division: transaction?.division || 'personal',
         description: transaction?.description || '',
-        date: transaction?.date ? new Date(transaction.date).toISOString().slice(0, 16) : new Date().toISOString().slice(0, 16),
+        date: formatForDateTimeLocal(transaction?.date || new Date()),
         toAccountId: transaction?.toAccountId?._id || ''
     });
     const [loading, setLoading] = useState(false);
@@ -52,11 +52,17 @@ const TransactionModal: React.FC<Props> = ({ onClose, onSuccess, transaction = n
         setLoading(true);
 
         try {
-            const data = {
+            const data: any = {
                 ...formData,
                 type: activeTab,
-                amount: parseFloat(formData.amount)
+                amount: parseFloat(formData.amount),
+                date: new Date(formData.date).toISOString()
             };
+
+            // Remove toAccountId if not transfer or if it's empty
+            if (activeTab !== 'transfer' || !data.toAccountId) {
+                delete data.toAccountId;
+            }
 
             if (transaction) {
                 await transactionService.updateTransaction(transaction._id, data);
@@ -139,8 +145,8 @@ const TransactionModal: React.FC<Props> = ({ onClose, onSuccess, transaction = n
                         <button
                             onClick={() => setActiveTab('expense')}
                             className={`flex-1 py-3 px-4 text-sm font-semibold rounded-xl transition-all ${activeTab === 'expense'
-                                    ? 'bg-gradient-to-r from-rose-500 to-rose-600 text-white shadow-lg'
-                                    : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+                                ? 'bg-gradient-to-r from-rose-500 to-rose-600 text-white shadow-lg'
+                                : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
                                 }`}
                         >
                             💸 Expense
@@ -148,8 +154,8 @@ const TransactionModal: React.FC<Props> = ({ onClose, onSuccess, transaction = n
                         <button
                             onClick={() => setActiveTab('income')}
                             className={`flex-1 py-3 px-4 text-sm font-semibold rounded-xl transition-all ${activeTab === 'income'
-                                    ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-lg'
-                                    : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+                                ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-lg'
+                                : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
                                 }`}
                         >
                             💰 Income
@@ -157,8 +163,8 @@ const TransactionModal: React.FC<Props> = ({ onClose, onSuccess, transaction = n
                         <button
                             onClick={() => setActiveTab('transfer')}
                             className={`flex-1 py-3 px-4 text-sm font-semibold rounded-xl transition-all ${activeTab === 'transfer'
-                                    ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg'
-                                    : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+                                ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg'
+                                : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
                                 }`}
                         >
                             🔄 Transfer
@@ -175,7 +181,7 @@ const TransactionModal: React.FC<Props> = ({ onClose, onSuccess, transaction = n
                         </label>
                         <div className="relative">
                             <div className="absolute left-4 top-1/2 -translate-y-1/2">
-                                <DollarSign className="h-5 w-5 text-slate-400" />
+                                <IndianRupee className="h-5 w-5 text-slate-400" />
                             </div>
                             <input
                                 type="number"
@@ -183,7 +189,7 @@ const TransactionModal: React.FC<Props> = ({ onClose, onSuccess, transaction = n
                                 required
                                 step="0.01"
                                 min="0"
-                                className="w-full pl-12 pr-4 py-4 text-2xl font-bold border-2 border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all bg-slate-50 focus:bg-white"
+                                className="w-full pl-12 pr-4 py-4 text-2xl font-bold border-2 border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all bg-slate-50 focus:bg-white [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                 placeholder="0.00"
                                 value={formData.amount}
                                 onChange={handleChange}
@@ -252,8 +258,8 @@ const TransactionModal: React.FC<Props> = ({ onClose, onSuccess, transaction = n
                                         type="button"
                                         onClick={() => setFormData({ ...formData, category: cat.value })}
                                         className={`group p-4 rounded-xl border-2 transition-all transform hover:scale-105 ${formData.category === cat.value
-                                                ? `border-2 ${currentTab.border} ${currentTab.bg} shadow-lg`
-                                                : 'border-slate-200 hover:border-slate-300 bg-white hover:shadow-md'
+                                            ? `border-2 ${currentTab.border} ${currentTab.bg} shadow-lg`
+                                            : 'border-slate-200 hover:border-slate-300 bg-white hover:shadow-md'
                                             }`}
                                     >
                                         <div className="text-3xl mb-2 group-hover:scale-110 transition-transform">
@@ -279,8 +285,8 @@ const TransactionModal: React.FC<Props> = ({ onClose, onSuccess, transaction = n
                                 type="button"
                                 onClick={() => setFormData({ ...formData, division: DIVISIONS.PERSONAL })}
                                 className={`group p-5 rounded-xl border-2 transition-all transform hover:scale-105 ${formData.division === DIVISIONS.PERSONAL
-                                        ? 'border-primary-600 bg-primary-50 shadow-lg'
-                                        : 'border-slate-200 hover:border-slate-300 bg-white hover:shadow-md'
+                                    ? 'border-primary-600 bg-primary-50 shadow-lg'
+                                    : 'border-slate-200 hover:border-slate-300 bg-white hover:shadow-md'
                                     }`}
                             >
                                 <div className="text-2xl mb-2">👤</div>
@@ -293,8 +299,8 @@ const TransactionModal: React.FC<Props> = ({ onClose, onSuccess, transaction = n
                                 type="button"
                                 onClick={() => setFormData({ ...formData, division: DIVISIONS.OFFICE })}
                                 className={`group p-5 rounded-xl border-2 transition-all transform hover:scale-105 ${formData.division === DIVISIONS.OFFICE
-                                        ? 'border-primary-600 bg-primary-50 shadow-lg'
-                                        : 'border-slate-200 hover:border-slate-300 bg-white hover:shadow-md'
+                                    ? 'border-primary-600 bg-primary-50 shadow-lg'
+                                    : 'border-slate-200 hover:border-slate-300 bg-white hover:shadow-md'
                                     }`}
                             >
                                 <div className="text-2xl mb-2">💼</div>

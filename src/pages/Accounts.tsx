@@ -4,18 +4,20 @@ import { Plus, Wallet, CreditCard, Building2, PiggyBank, Edit2, Trash2, Trending
 import type { Account, CreateAccountDto } from '../types';
 import { formatCurrency } from '../utils/helpers';
 import { accountService } from '../services/accountService';
+import { useNavigate } from 'react-router-dom';
 
 const Accounts = () => {
     const [accounts, setAccounts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
-    const [formData, setFormData] = useState<CreateAccountDto>({
+    const [formData, setFormData] = useState<any>({
         name: '',
         type: 'cash',
-        balance: 0,
+        balance: '0',
         currency: 'INR'
     });
     const [editingId, setEditingId] = useState<string | null>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchAccounts();
@@ -36,14 +38,19 @@ const Accounts = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
+            const payload = {
+                ...formData,
+                balance: parseFloat(formData.balance.toString()) || 0
+            };
+
             if (editingId) {
-                await accountService.updateAccount(editingId, formData);
+                await accountService.updateAccount(editingId, payload);
                 toast.success('Account updated successfully', {
                     icon: '✓',
                     style: { borderRadius: '12px' },
                 });
             } else {
-                await accountService.createAccount(formData);
+                await accountService.createAccount(payload);
                 toast.success('Account created successfully', {
                     icon: '🎉',
                     style: { borderRadius: '12px' },
@@ -51,7 +58,7 @@ const Accounts = () => {
             }
             setShowModal(false);
             setEditingId(null);
-            setFormData({ name: '', type: 'cash', balance: 0, currency: 'INR' });
+            setFormData({ name: '', type: 'cash', balance: '0', currency: 'INR' });
             fetchAccounts();
         } catch (error: any) {
             toast.error(error.response?.data?.message || 'Operation failed', {
@@ -60,18 +67,21 @@ const Accounts = () => {
         }
     };
 
-    const handleEdit = (account: Account) => {
+    const handleEdit = (e: React.MouseEvent<HTMLButtonElement>, account: Account) => {
+        e.stopPropagation();
         setFormData({
             name: account.name,
             type: account.type,
-            balance: account.balance,
+            balance: account.balance.toString(),
             currency: account.currency
         });
         setEditingId(account._id);
         setShowModal(true);
     };
 
-    const handleDelete = async (id: string) => {
+    const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>, id: string) => {
+        e.stopPropagation();
+
         if (!window.confirm('Are you sure you want to delete this account?')) {
             return;
         }
@@ -152,7 +162,7 @@ const Accounts = () => {
                     <button
                         onClick={() => {
                             setEditingId(null);
-                            setFormData({ name: '', type: 'cash', balance: 0, currency: 'INR' });
+                            setFormData({ name: '', type: 'cash', balance: '0', currency: 'INR' });
                             setShowModal(true);
                         }}
                         className="group relative inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
@@ -202,7 +212,7 @@ const Accounts = () => {
                         <button
                             onClick={() => {
                                 setEditingId(null);
-                                setFormData({ name: '', type: 'cash', balance: 0, currency: 'INR' });
+                                setFormData({ name: '', type: 'cash', balance: '0', currency: 'INR' });
                                 setShowModal(true);
                             }}
                             className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary-600 to-primary-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
@@ -217,6 +227,7 @@ const Accounts = () => {
                             <div
                                 key={account._id}
                                 className={`group relative overflow-hidden bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border-2 ${getAccountBgColor(account.type)}`}
+                                onClick={() => navigate(`/accounts/${account._id}`)}
                             >
                                 <div className="p-6">
                                     {/* Header */}
@@ -228,13 +239,13 @@ const Accounts = () => {
                                         </div>
                                         <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                             <button
-                                                onClick={() => handleEdit(account)}
+                                                onClick={(e) => handleEdit(e, account)}
                                                 className="p-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg transition-colors"
                                             >
                                                 <Edit2 className="h-4 w-4" />
                                             </button>
                                             <button
-                                                onClick={() => handleDelete(account._id)}
+                                                onClick={(e) => handleDelete(e, account._id)}
                                                 className="p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors"
                                             >
                                                 <Trash2 className="h-4 w-4" />
@@ -304,7 +315,7 @@ const Accounts = () => {
                                     </select>
                                 </div>
 
-                                <div>
+                                {!editingId && <div>
                                     <label className="block text-sm font-semibold text-slate-700 mb-2">
                                         Initial Balance
                                     </label>
@@ -313,15 +324,21 @@ const Accounts = () => {
                                             ₹
                                         </span>
                                         <input
-                                            type="number"
-                                            step="0.01"
-                                            className="w-full pl-8 pr-4 py-3 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all bg-slate-50 focus:bg-white"
+                                            type="text"
+                                            inputMode="decimal"
+                                            className="w-full pl-8 pr-4 py-3 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all bg-slate-50 focus:bg-white [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                             placeholder="0.00"
                                             value={formData.balance}
-                                            onChange={(e) => setFormData({ ...formData, balance: parseFloat(e.target.value) || 0 })}
+                                            onChange={(e) => {
+                                                const val = e.target.value;
+                                                // Allow only numbers and leading minus sign
+                                                if (val === '' || val === '-' || /^-?\d*\.?\d*$/.test(val)) {
+                                                    setFormData({ ...formData, balance: val });
+                                                }
+                                            }}
                                         />
                                     </div>
-                                </div>
+                                </div>}
 
                                 <div className="flex gap-3 pt-4">
                                     <button

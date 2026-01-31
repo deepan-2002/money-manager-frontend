@@ -148,8 +148,8 @@ const Transactions = () => {
                         <button
                             onClick={() => setShowFilters(!showFilters)}
                             className={`inline-flex items-center gap-2 px-5 py-3 rounded-xl font-semibold transition-all duration-200 ${showFilters || hasActiveFilters
-                                    ? 'bg-primary-600 text-white shadow-lg'
-                                    : 'bg-white text-slate-700 border-2 border-slate-200 hover:border-primary-300'
+                                ? 'bg-primary-600 text-white shadow-lg'
+                                : 'bg-white text-slate-700 border-2 border-slate-200 hover:border-primary-300'
                                 }`}
                         >
                             <Filter className="h-5 w-5" />
@@ -318,7 +318,7 @@ const Transactions = () => {
                                                     </span>
                                                 </td>
                                                 <td className={`py-4 px-6 text-right font-bold ${style.amount}`}>
-                                                    {transaction.type === 'income' ? '+' : '-'}
+                                                    {transaction.type === 'income' ? '+' : transaction.type === 'transfer' ? '' : '-'}
                                                     {formatCurrency(transaction.amount)}
                                                 </td>
                                                 <td className="py-4 px-6">
@@ -327,8 +327,8 @@ const Transactions = () => {
                                                             onClick={() => handleEdit(transaction)}
                                                             disabled={!transaction.isEditable}
                                                             className={`p-2 rounded-lg transition-all ${transaction.isEditable
-                                                                    ? 'bg-blue-50 hover:bg-blue-100 text-blue-600'
-                                                                    : 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                                                                ? 'bg-blue-50 hover:bg-blue-100 text-blue-600'
+                                                                : 'bg-slate-100 text-slate-400 cursor-not-allowed'
                                                                 }`}
                                                             title={transaction.isEditable ? 'Edit' : 'Can only edit within 12 hours'}
                                                         >
@@ -338,8 +338,8 @@ const Transactions = () => {
                                                             onClick={() => handleDelete(transaction._id)}
                                                             disabled={!transaction.isEditable}
                                                             className={`p-2 rounded-lg transition-all ${transaction.isEditable
-                                                                    ? 'bg-rose-50 hover:bg-rose-100 text-rose-600'
-                                                                    : 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                                                                ? 'bg-rose-50 hover:bg-rose-100 text-rose-600'
+                                                                : 'bg-slate-100 text-slate-400 cursor-not-allowed'
                                                                 }`}
                                                             title={transaction.isEditable ? 'Delete' : 'Can only delete within 12 hours'}
                                                         >

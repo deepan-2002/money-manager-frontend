@@ -107,7 +107,7 @@ const Register = () => {
                     type="text"
                     required
                     className="block w-full pl-12 pr-4 py-3.5 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white"
-                    placeholder="John Doe"
+                    placeholder="Enter your name"
                     value={formData.name}
                     onChange={handleChange}
                   />
@@ -129,7 +129,7 @@ const Register = () => {
                     type="email"
                     required
                     className="block w-full pl-12 pr-4 py-3.5 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white"
-                    placeholder="you@example.com"
+                    placeholder="Enter your email"
                     value={formData.email}
                     onChange={handleChange}
                   />
@@ -163,7 +163,7 @@ const Register = () => {
                     <div className="flex items-center justify-between mb-1">
                       <span className="text-xs text-gray-500">Password strength</span>
                       <span className={`text-xs font-semibold ${strength.strength === 100 ? 'text-green-600' :
-                          strength.strength === 66 ? 'text-yellow-600' : 'text-red-600'
+                        strength.strength === 66 ? 'text-yellow-600' : 'text-red-600'
                         }`}>{strength.label}</span>
                     </div>
                     <div className="h-2 bg-gray-200 rounded-full overflow-hidden">

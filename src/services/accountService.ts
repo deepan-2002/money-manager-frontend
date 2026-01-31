@@ -25,5 +25,15 @@ export const accountService = {
     deleteAccount: async (id: string) => {
         const response = await api.delete(`/accounts/${id}`);
         return response.data;
+    },
+
+    getAccountTransactions: async (id: string, params: any) => {
+        const response = await api.get(`/accounts/${id}/transactions`, { params });
+        return response.data;
+    },
+
+    recalibrateAccount: async (id: string) => {
+        const response = await api.post(`/accounts/${id}/recalibrate`);
+        return response.data;
     }
 };
