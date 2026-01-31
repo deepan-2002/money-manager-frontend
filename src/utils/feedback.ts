@@ -7,7 +7,7 @@ export const setToastHelper = (fn: (message: string, severity: AlertColor) => vo
   toastHelper = fn;
 };
 
-export const showFeedback = (type: string, message: string) => {
+export const showFeedback = (type: AlertColor, message: string) => {
   // Map old feedback types to toast severity
   const severityMap: Record<string, AlertColor> = {
     'Error': 'error',
