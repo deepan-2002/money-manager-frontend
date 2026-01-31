@@ -19,7 +19,7 @@ const CategoryChart: React.FC<{ categoryBreakdown: any }> = ({ categoryBreakdown
                             outerRadius={100}
                             label={(entry: any) => `${entry.category}: ${entry.percentage}%`}
                         >
-                            {categoryBreakdown.breakdown.map((entry: any, index: number) => (
+                            {categoryBreakdown.breakdown.map((_: any, index: number) => (
                                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                             ))}
                         </Pie>

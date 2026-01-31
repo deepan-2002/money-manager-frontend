@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import {
@@ -47,8 +46,8 @@ const Navbar = () => {
                     key={item.path}
                     to={item.path}
                     className={`inline-flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${isActive
-                        ? 'text-primary-600 bg-primary-50'
-                        : 'text-gray-600 hover:text-primary-600 hover:bg-gray-50'
+                      ? 'text-primary-600 bg-primary-50'
+                      : 'text-gray-600 hover:text-primary-600 hover:bg-gray-50'
                       }`}
                   >
                     <Icon className="h-4 w-4 mr-2" />
@@ -86,8 +85,8 @@ const Navbar = () => {
                 key={item.path}
                 to={item.path}
                 className={`flex flex-col items-center px-3 py-2 text-xs font-medium rounded-md ${isActive
-                    ? 'text-primary-600'
-                    : 'text-gray-600'
+                  ? 'text-primary-600'
+                  : 'text-gray-600'
                   }`}
               >
                 <Icon className="h-5 w-5 mb-1" />

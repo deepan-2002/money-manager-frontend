@@ -1,4 +1,4 @@
-import type { Account, CreateAccountDto, UpdateAccountDto } from '../types';
+import type { CreateAccountDto, UpdateAccountDto } from '../types';
 import api from './api';
 
 export const accountService = {

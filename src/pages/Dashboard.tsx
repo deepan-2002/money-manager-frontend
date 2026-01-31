@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { reportService } from '../services/reportService';
 import { transactionService } from '../services/transactionService';
 import { formatCurrency } from '../utils/helpers';
@@ -14,7 +14,6 @@ import TransactionModal from '../components/transactions/TransactionModal';
 import type { Transaction } from '../types';
 import IncomeExpenseChart from '../components/dashboard/IncomeExpenseChart';
 import RecentTransactions from '../components/dashboard/RecentTransactions';
-import CategoryBreakdown from '../components/report/CategoryBreakdown';
 import CategoryChart from '../components/report/CategoryChart';
 
 const Dashboard = () => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { transactionService } from '../services/transactionService';
 import { formatCurrency, formatDateTime } from '../utils/helpers';
 import toast from 'react-hot-toast';

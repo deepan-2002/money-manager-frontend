@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { reportService } from '../services/reportService';
 import { formatCurrency } from '../utils/helpers';
 import toast from 'react-hot-toast';
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import CategoryBreakdown from '../components/report/CategoryBreakdown';
 
 const Reports = () => {
-    const [period, setPeriod] = useState('month');
+    const [period] = useState('month');
     const [categoryBreakdown, setCategoryBreakdown] = useState<any>(null);
     const [divisionBreakdown, setDivisionBreakdown] = useState<any>([]);
     const [loading, setLoading] = useState(true);
