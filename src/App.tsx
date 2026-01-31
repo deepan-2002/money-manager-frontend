@@ -8,6 +8,8 @@ import Register from './pages/Register';
 import Navbar from './components/layout/Navbar';
 import Accounts from './pages/Accounts';
 import Transactions from './pages/Transactions';
+import Dashboard from './pages/Dashboard';
+import Reports from './pages/Reports';
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, loading } = useAuth();
@@ -28,8 +30,10 @@ function AppRoutes() {
       <Routes>
         <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
         <Route path="/register" element={user ? <Navigate to="/" /> : <Register />} />
+        <Route path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
         <Route path="/transactions" element={<PrivateRoute><Transactions /></PrivateRoute>} />
         <Route path="/accounts" element={<PrivateRoute><Accounts /></PrivateRoute>} />
+        <Route path="/reports" element={<PrivateRoute><Reports /></PrivateRoute>} />
       </Routes>
     </>
   );
