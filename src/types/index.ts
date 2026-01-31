@@ -7,13 +7,11 @@ export interface User {
 
 export interface Account {
   _id: string;
+  userId: string;
   name: string;
   type: string;
   balance: number;
   currency: string;
-  user: string;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export interface LoginDto {
@@ -39,4 +37,46 @@ export interface UpdateAccountDto {
   type?: string;
   balance?: number;
   currency?: string;
+}
+
+export interface Transaction {
+  _id: string;
+  userId: string;
+  accountId: string | Account;
+  type: string;
+  amount: number;
+  category: string;
+  division: string;
+  description: string;
+  date: string;
+  toAccountId: string;
+  transferType: string;
+  isEditable: boolean;
+}
+
+export interface CreateTransactionDto {
+  accountId: string,
+  type: string,
+  amount: number,
+  category: string,
+  division: string,
+  description: string,
+  date: string,
+  toAccountId: string
+}
+
+export interface UpdateTransactionDto {
+  accountId: string,
+  type: string,
+  amount: number,
+  category: string,
+  division: string,
+  description: string,
+  date: string,
+  toAccountId: string
+}
+
+export interface CategorySummary {
+  category: string;
+  amount: number;
 }
