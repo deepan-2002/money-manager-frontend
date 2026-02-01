@@ -6,6 +6,7 @@ import { useAuth } from './hooks/useAuth';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Navbar from './components/layout/Navbar';
+import Footer from './components/layout/Footer';
 import Accounts from './pages/Accounts';
 import Transactions from './pages/Transactions';
 import Dashboard from './pages/Dashboard';
@@ -45,8 +46,11 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <div className="min-h-screen bg-gray-50">
-          <AppRoutes />
+        <div className="min-h-screen bg-gray-50 flex flex-col">
+          <div className="flex-grow">
+            <AppRoutes />
+          </div>
+          <Footer />
           <Toaster position="top-right" />
         </div>
       </AuthProvider>

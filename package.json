@@ -2,6 +2,7 @@
   "name": "money-manager-frontend",
   "private": true,
   "version": "0.0.0",
+  "author": "Deeban Yathiraja",
   "type": "module",
   "scripts": {
     "dev": "vite",
