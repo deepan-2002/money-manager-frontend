@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { Plus, Wallet, CreditCard, Building2, PiggyBank, Edit2, Trash2, TrendingUp } from 'lucide-react';
-import type { Account, CreateAccountDto } from '../types';
+import type { Account } from '../types';
 import { formatCurrency } from '../utils/helpers';
 import { accountService } from '../services/accountService';
 import { useNavigate } from 'react-router-dom';
